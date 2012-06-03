@@ -23,6 +23,7 @@ Given /^a cookbook recipe that declares (too many )?execute resources varying on
       end
     end
   }.strip
+  write_metadata
 end
 
 Given /^a cookbook recipe that declares a ([^ ]+) resource with the ([^ ]+) attribute set to (.*)$/ do |resource, attribute, value|
@@ -31,6 +32,7 @@ Given /^a cookbook recipe that declares a ([^ ]+) resource with the ([^ ]+) attr
       #{attribute} #{value}
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook provider that declares execute resources varying only in the command in separate actions' do
@@ -54,6 +56,7 @@ Given 'a cookbook provider that declares execute resources varying only in the c
       new_resource.updated_by_last_action(true)
     end
   }.strip
+  write_metadata
 end
 
 Given 'a cookbook provider that declares execute resources varying only in the command in the same action' do
@@ -71,6 +74,7 @@ Given 'a cookbook provider that declares execute resources varying only in the c
       new_resource.updated_by_last_action(true)
     end
   }.strip
+  write_metadata
 end
 
 Given /^a cookbook recipe that attempts to perform a search with (.*)$/ do |search_type|
@@ -86,6 +90,7 @@ Given /^a cookbook recipe that declares a resource called ([^ ]+) with the condi
       end
     #{'end' if is_loop == 'in'}
   }
+  write_metadata
 end
 
 Given /^a cookbook recipe that declares (a resource|multiple resources) nested in a ([a-z_]+) condition with (.*)$/ do |arity, wrapping_condition, condition_attribute|
@@ -110,6 +115,7 @@ Given /^a cookbook recipe that declares (a resource|multiple resources) nested i
     #{"else\nlog 'foo'" if conds.include? 'else'}
     end
   }
+  write_metadata
 end
 
 Given /^a cookbook recipe that declares a resource with a (.*)$/ do |conditional|
@@ -120,6 +126,7 @@ Given /^a cookbook recipe that declares a resource with a (.*)$/ do |conditional
       #{conditional}
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook recipe that declares a resource with no conditions at all' do
@@ -128,6 +135,7 @@ Given 'a cookbook recipe that declares a resource with no conditions at all' do
       action :enable
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook recipe that declares multiple package resources mixed with other resources' do
@@ -154,6 +162,7 @@ Given 'a cookbook recipe that declares multiple package resources mixed with oth
       action :install
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook recipe that declares multiple resources varying only in the package name' do
@@ -171,6 +180,7 @@ Given 'a cookbook recipe that declares multiple resources varying only in the pa
       action :install
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook recipe that declares multiple resources with more variation' do
@@ -189,6 +199,7 @@ Given 'a cookbook recipe that declares multiple resources with more variation' d
       action :install
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook recipe that declares non contiguous package resources mixed with other resources' do
@@ -212,6 +223,7 @@ Given 'a cookbook recipe that declares non contiguous package resources mixed wi
       action :install
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook recipe that declares two or fewer resources varying only in the package name' do
@@ -223,6 +235,7 @@ Given 'a cookbook recipe that declares two or fewer resources varying only in th
       action :install
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook recipe that has a wrapping condition containing a resource with no condition attribute and a Ruby statement' do
@@ -234,6 +247,7 @@ Given 'a cookbook recipe that has a wrapping condition containing a resource wit
       end
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook recipe that has a wrapping condition containing a resource with no condition attribute within a loop' do
@@ -246,6 +260,7 @@ Given 'a cookbook recipe that has a wrapping condition containing a resource wit
       end
     end
   }
+  write_metadata
 end
 
 Given /^a cookbook recipe that includes a local recipe(.*)$/ do |diff_name|
@@ -322,6 +337,7 @@ Given 'a cookbook recipe that uses execute to list a directory' do
       action :run
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook recipe that uses execute with a name attribute to start a service' do
@@ -330,6 +346,7 @@ Given 'a cookbook recipe that uses execute with a name attribute to start a serv
       cwd "/tmp"
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook recipe with a case condition unrelated to platform' do
@@ -345,6 +362,7 @@ Given 'a cookbook recipe with a case condition unrelated to platform' do
       end
     end
   }.strip
+  write_metadata
 end
 
 Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |type,flavours|
@@ -375,6 +393,7 @@ Given /^a cookbook recipe with a '([^']+)' condition for flavours (.*)$/ do |typ
   else
     fail "Unrecognised type: #{type}"
   end
+  write_metadata
 end
 
 Given /^a cookbook that contains a (short|long) ruby block$/ do |length|
@@ -390,6 +409,7 @@ Given 'a cookbook that contains a definition' do
   write_recipe %q{
     apache_site "default"
   }
+  write_metadata
 end
 
 Given /^a cookbook that contains a LWRP (?:with a single notification|that uses the current notification syntax)$/ do
@@ -409,6 +429,7 @@ Given /^a cookbook that contains a LWRP that declares a resource called ([^ ]+) 
       end
     end
   })
+  write_metadata
 end
 
 Given /^a cookbook that contains a LWRP that (?:does not trigger notifications|declares a resource with no condition)$/ do
@@ -421,6 +442,7 @@ Given /^a cookbook that contains a LWRP that (?:does not trigger notifications|d
       log "Here is where I would create a site"
     end
   })
+  write_metadata
 end
 
 Given /^a cookbook that contains a LWRP that uses the deprecated notification syntax(.*)$/ do |qualifier|
@@ -442,6 +464,7 @@ Given 'a cookbook that contains a LWRP with multiple notifications' do
       new_resource.updated_by_last_action(true)
     end
   })
+  write_metadata
 end
 
 Given /^a cookbook that contains a LWRP with (no|a) default action( defined via a constructor)?$/ do |has_default_action,no_dsl|
@@ -462,6 +485,7 @@ Given 'a cookbook that contains no ruby blocks' do
       action :install
     end
   }
+  write_metadata
 end
 
 Given /^a cookbook that declares ([a-z]+) attributes via symbols$/ do |attribute_type|
@@ -473,12 +497,14 @@ Given /^a cookbook that does not contain a definition and has (no|a) definitions
   write_recipe %q{
     log "A defining characteristic of this cookbook is that it has no definitions"
   }
+  write_metadata
 end
 
 Given 'a cookbook that does not have a README at all' do
   write_recipe %q{
     log "Use the source luke"
   }
+  write_metadata
 end
 
 Given 'a cookbook that does not have defined metadata' do
@@ -502,6 +528,7 @@ Given 'a cookbook that has a README in markdown format' do
 
     Hi. This is markdown.
   }
+  write_metadata
 end
 
 Given 'a cookbook that has a README in RDoc format' do
@@ -513,6 +540,7 @@ Given 'a cookbook that has a README in RDoc format' do
 
     I used to be the preferred format but not any more (sniff).
   }
+  write_metadata
 end
 
 Given /^a cookbook that has maintainer metadata set to (.*) and ([^ ]+)$/ do |name,email|
@@ -533,6 +561,7 @@ Given 'a cookbook that matches that rule' do
       action :run
     end
   }
+  write_metadata
 end
 
 Given /^a cookbook with a single recipe for which the first hash (key|value) is an interpolated string$/ do |key_or_value|
@@ -540,6 +569,7 @@ Given /^a cookbook with a single recipe for which the first hash (key|value) is 
     when 'key' then %q{{"#{foo}" => 'bar', 'bar' => 'foo'}}
     when 'value' then %q{{'foo' => "#{bar}", 'bar' => 'foo'}}
   end
+  write_metadata
 end
 
 Given 'a cookbook with a single recipe that accesses multiple node attributes via symbols' do
@@ -547,10 +577,12 @@ Given 'a cookbook with a single recipe that accesses multiple node attributes vi
     node[:foo] = 'bar'
     node[:testing] = 'bar'
   }
+  write_metadata
 end
 
 Given 'a cookbook with a single recipe that accesses nested node attributes via symbols' do
   write_recipe %q{node[:foo][:foo2] = 'bar'}
+  write_metadata
 end
 
 Given 'a cookbook with a single recipe that calls a patched node method' do
@@ -568,6 +600,7 @@ Given 'a cookbook with a single recipe that calls a patched node method' do
       Chef::Log.info("Node has been patched")
     end
   }
+  write_metadata
 end
 
 Given 'a cookbook with a single recipe that passes node attributes accessed via symbols to a template' do
@@ -580,6 +613,7 @@ Given 'a cookbook with a single recipe that passes node attributes accessed via 
       })
     end
   }.strip
+  write_metadata
 end
 
 Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nested)? node attributes via ([a-z,]*)(?:(?: and calls node\.)?([a-z_?]+)?| with (.*)?)(?: only)?$/ do |more_than_one,op,nested,types,method,expr|
@@ -607,6 +641,7 @@ Given /a(nother)? cookbook with a single recipe that (reads|updates|ignores)(nes
   end
 
   write_recipe(recipe_content, cookbook_name)
+  write_metadata
 
 end
 
@@ -614,6 +649,7 @@ Given 'a cookbook with a single recipe that searches based on a node attribute a
   write_recipe %q{
     remote = search(:node, "name:#{node['drbd']['remote_host']}")[0]
   }.strip
+  write_metadata
 end
 
 Given 'a cookbook with a single recipe which accesses node attributes with symbols on lines 2 and 10' do
@@ -629,10 +665,12 @@ Given 'a cookbook with a single recipe which accesses node attributes with symbo
 
     bar = node[:bar]
   }
+  write_metadata
 end
 
 Given 'a cookbook with a single recipe that assigns node attributes accessed via symbols to a local variable' do
   write_recipe %q{baz = node[:foo]}
+  write_metadata
 end
 
 Given /^a cookbook with a single recipe that creates a directory resource with (.*)$/ do |path_type|
@@ -652,6 +690,7 @@ Given /^a cookbook with a single recipe that searches but checks first( \(string
       nodes = search(:node, "hostname:[* TO *] AND chef_environment:#\{node.chef_environment\}")
     end
   }
+  write_metadata
 end
 
 Given /^a cookbook with a single recipe that searches but checks first \(method\) to see if this is server$/ do
@@ -666,6 +705,7 @@ end
 
 Given 'a cookbook with a single recipe that searches without checking if this is server' do
   write_recipe %q{nodes = search(:node, "hostname:[* TO *] AND chef_environment:#{node.chef_environment}")}
+  write_metadata
 end
 
 Given 'a file resource declared without a mode' do
@@ -674,6 +714,7 @@ Given 'a file resource declared without a mode' do
       action :delete
     end
   }
+  write_metadata
 end
 
 Given /^a recipe that declares a ([^ ]+) resource with these attributes: (.*)$/ do |type,attributes|
@@ -684,6 +725,7 @@ Given 'a recipe that declares a resource with only a name attribute' do
   write_recipe %q{
     package 'foo'
   }
+  write_metadata
 end
 
 Given 'a recipe that declares a resource with recognised attributes and a conditional execution ruby block' do
@@ -699,6 +741,7 @@ Given 'a recipe that declares a resource with recognised attributes and a condit
       action :create
     end
   }
+  write_metadata
 end
 
 Given 'a recipe that declares a resource with standard attributes' do
@@ -710,6 +753,7 @@ Given 'a recipe that declares a resource with standard attributes' do
       action :create
     end
   }
+  write_metadata
 end
 
 Given 'a recipe that declares a user-defined resource' do
@@ -719,6 +763,7 @@ Given 'a recipe that declares a user-defined resource' do
       action :consume
     end
   }
+  write_metadata
 end
 
 Given 'a recipe that declares multiple resources of the same type of which one has a bad attribute' do
@@ -739,6 +784,7 @@ Given 'a recipe that declares multiple resources of the same type of which one h
       action :install
     end
   }
+  write_metadata
 end
 
 Given /^a rule that (declares|does not declare) a version constraint(?: of ([^ ]+)? to ([^ ]+)?)?$/ do |constraint, from, to|
@@ -777,6 +823,7 @@ Given /^another cookbook that has (an older )?chef-solo-search installed$/ do |o
       end
     }
   end
+  write_metadata
 end
 
 Given 'I have installed the lint tool' do
@@ -788,6 +835,7 @@ Given 'I have started the lint tool with the REPL enabled' do
   write_recipe %Q{
     log "#{@repl_match_string}"
   }
+  write_metadata
 end
 
 Given /^the current stable version of Chef (falls|does not fall) within it$/ do |falls_within|

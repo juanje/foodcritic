@@ -8,6 +8,7 @@ module FoodCritic
     # @param [String] type The type of node attribute to write
     def attributes_with_symbols(type)
       write_attributes %Q{#{type}[:apache][:dir] = "/etc/apache2"}
+      write_metadata
     end
 
     # Create a cookbook that declares dependencies on external recipes.
@@ -57,6 +58,7 @@ module FoodCritic
       end
       write_recipe(recipe)
       write_readme('Hello World') # Don't trigger FC011
+      write_metadata
     end
 
     # Create a cookbook with a LRWP
@@ -87,6 +89,7 @@ module FoodCritic
           #{notifications[lwrp[:notifies]]}
         end
       })
+      write_metadata
     end
 
     # Create an cookbook with the maintainer specified in the metadata
@@ -128,6 +131,7 @@ module FoodCritic
           source "http://www.example.org/large-file.tar.gz"
         end
       }
+      write_metadata
     end
 
     # Install a gem using the specified approach.
@@ -173,6 +177,7 @@ module FoodCritic
         else
           fail "Unrecognised type: #{type}"
       end
+      write_metadata
     end
 
     # Create a recipe that declares a resource with the specified file mode.
@@ -190,6 +195,7 @@ module FoodCritic
           action :create
         end
       }
+      write_metadata
     end
 
     # Create a recipe that controls a service using the specified method.
@@ -206,6 +212,7 @@ module FoodCritic
           action :run
         end
       }
+      write_metadata
     end
 
     # Create a recipe with an external dependency on another cookbook.
@@ -240,6 +247,7 @@ module FoodCritic
           action :create
         end
       }
+      write_metadata
     end
 
     # Create a recipe with the specified resource type and attribute names.
@@ -252,6 +260,7 @@ module FoodCritic
           #{attribute_names.join(" 'foo'\n")} 'bar'
         end
       }
+      write_metadata
     end
 
     # Create a recipe with a ruby_block resource.
@@ -296,6 +305,7 @@ module FoodCritic
           end
         }
       end
+      write_metadata
     end
 
     # Create a recipe that performs a search of the specified type.
@@ -309,6 +319,7 @@ module FoodCritic
           puts matching_node.to_s
         end
       }
+      write_metadata
     end
 
     # Create a rule with the specified Chef version constraints
@@ -402,7 +413,7 @@ module FoodCritic
     # Create metdata with the provided content.
     #
     # @param [String] content The metadata content.
-    def write_metadata(content)
+    def write_metadata(content = 'name "example"')
       write_file 'cookbooks/example/metadata.rb', content.strip
     end
 
